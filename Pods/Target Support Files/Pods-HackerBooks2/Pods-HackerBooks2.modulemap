@@ -1,0 +1,6 @@
+framework module Pods_HackerBooks2 {
+  umbrella header "Pods-HackerBooks2-umbrella.h"
+
+  export *
+  module * { export * }
+}
