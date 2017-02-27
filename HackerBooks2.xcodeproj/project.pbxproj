@@ -35,6 +35,7 @@
 		5B8767771E5F5C6C00EFB42C /* MyFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B8767761E5F5C6C00EFB42C /* MyFileManager.swift */; };
 		5B8767791E5F633B00EFB42C /* UtilsStatics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B8767781E5F633B00EFB42C /* UtilsStatics.swift */; };
 		5B87677B1E5F634900EFB42C /* JsonParserServiceCoreDataImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B87677A1E5F634900EFB42C /* JsonParserServiceCoreDataImpl.swift */; };
+		63D69E251E646095009934B5 /* LoadingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D69E241E646095009934B5 /* LoadingController.swift */; };
 		AC312C3E7E88B5D9224F7D69 /* Pods_HackerBooks2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B46FC05F0AEB85B906315857 /* Pods_HackerBooks2.framework */; };
 /* End PBXBuildFile section */
 
@@ -69,6 +70,7 @@
 		5B8767761E5F5C6C00EFB42C /* MyFileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyFileManager.swift; sourceTree = "<group>"; };
 		5B8767781E5F633B00EFB42C /* UtilsStatics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UtilsStatics.swift; sourceTree = "<group>"; };
 		5B87677A1E5F634900EFB42C /* JsonParserServiceCoreDataImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JsonParserServiceCoreDataImpl.swift; sourceTree = "<group>"; };
+		63D69E241E646095009934B5 /* LoadingController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingController.swift; sourceTree = "<group>"; };
 		6AB11F291BA494231C14D80B /* Pods-HackerBooks2.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HackerBooks2.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HackerBooks2/Pods-HackerBooks2.debug.xcconfig"; sourceTree = "<group>"; };
 		B46FC05F0AEB85B906315857 /* Pods_HackerBooks2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HackerBooks2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB1D4DBF7BAA717AF4749A07 /* Pods-HackerBooks2.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HackerBooks2.release.xcconfig"; path = "Pods/Target Support Files/Pods-HackerBooks2/Pods-HackerBooks2.release.xcconfig"; sourceTree = "<group>"; };
@@ -241,6 +243,7 @@
 			children = (
 				5B87674E1E5F5AEB00EFB42C /* LibraryController.swift */,
 				5B37DC561E60A2160054877F /* LibraryController+NSFetchedResultsControllerDelegate.swift */,
+				63D69E241E646095009934B5 /* LoadingController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -387,6 +390,7 @@
 				5B8767771E5F5C6C00EFB42C /* MyFileManager.swift in Sources */,
 				5B37DC611E60B8990054877F /* AsyncData.swift in Sources */,
 				5B87676A1E5F5BD900EFB42C /* ManagedObjectType.swift in Sources */,
+				63D69E251E646095009934B5 /* LoadingController.swift in Sources */,
 				5B37DC701E60BA3D0054877F /* Book+AsyncData.swift in Sources */,
 				5B8767741E5F5C2000EFB42C /* HackerBooksAPIManagerURLSessionHelper.swift in Sources */,
 				5B87674F1E5F5AEB00EFB42C /* LibraryController.swift in Sources */,

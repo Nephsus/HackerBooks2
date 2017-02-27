@@ -26,21 +26,6 @@ class LibraryController: UIViewController, UITableViewDataSource, UITableViewDel
         self.tableView.register(cell, forCellReuseIdentifier: BookViewCell.CELLID)
 
         
-      /* let initialInteractor = GetBooksInteractor()
-        
-        initialInteractor.context = context
-        
-        let progressHUD : HTProgressHUD = HTProgressHUD();
-        progressHUD.text = "Cargando..."
-        progressHUD.show(in:  UIApplication.shared.delegate?.window! )
-        
-       initialInteractor.executeOperation {
-            
-            DispatchQueue.main.async {
-                progressHUD.hide()
-            }
-        }*/
-        
     }
 
      func numberOfSections(in tableView: UITableView) -> Int {

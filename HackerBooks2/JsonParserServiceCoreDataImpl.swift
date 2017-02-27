@@ -59,12 +59,6 @@ func decode( withDictionary dictionary: Dictionary<String,String> ) -> Void{
     //Inizializo por pattern maching
     (libro.authors,libro.imageurl,libro.pdfurl,libro.title) = (authors,imageurl, pdfurl, title)
   
-    /* tags.map{ value in
-            let tag : Tag = context.insertObject()
-            tag.title = value
-            libro.addToTags( tag )
-            }*/
-    
     for value in tags!{
         
        let key = value.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).uppercased()
@@ -73,11 +67,14 @@ func decode( withDictionary dictionary: Dictionary<String,String> ) -> Void{
          let result = try! context.fetch( queryRequest )
         
         if result.count == 0{
-        
-        let tag : Tag = context.insertObject()
-        tag.title = value.uppercased()
-        libro.addToTags( tag )
+            let tag : Tag = context.insertObject()
+            tag.title = key
+            libro.addToTags( tag )
+        }else{
+            libro.addToTags( result.first! )
         }
+        
+    
     
     }
 }

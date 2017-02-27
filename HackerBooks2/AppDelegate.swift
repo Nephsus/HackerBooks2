@@ -59,11 +59,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func injectContextToFirstViewController( context: NSManagedObjectContext ) {
-        if let navController = window?.rootViewController as? UINavigationController,
-            let initialViewController = navController.topViewController as? LibraryController
+       /* if let navController = window?.rootViewController as? UINavigationController,
+            let initialViewController = navController.topViewController as? LoadingController
         {
             initialViewController.context = context
+        }*/
+        if let navController = window?.rootViewController as? LoadingController{
+        navController.context = context
         }
+        
     }
     
     

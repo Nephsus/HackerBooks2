@@ -35,10 +35,12 @@ class BookViewCell: UITableViewCell {
         self.book = book
         subscribeChangeStateBook()
         
-        let asyncData = AsyncData(url:  URL(string: (self.book?.imageurl)!)!, defaultData: BookViewCell.defaultImageAsData)
+       let asyncData = AsyncData(url:  URL(string: (self.book?.imageurl)!)!,
+                                 defaultData: BookViewCell.defaultImageAsData)
         asyncData.delegate = book
         
-        book.asyncData = asyncData
+        self.book?.asyncData = asyncData
+        
         
         syncModelWithView()
         
@@ -46,12 +48,18 @@ class BookViewCell: UITableViewCell {
     
     func syncModelWithView(){
         
-       
-        
-        coverImage.image = UIImage(data: (book?.asyncData.data)!)
+      /*  if ( book != nil && book?.asyncData != nil ){
+            coverImage.image = UIImage(data: (book?.asyncData.data)!)
+        }*/
         coverImage.clipsToBounds = true
         lbTitle.text = self.book?.title
-        //lbTags.text = self.book?.tags.joined(separator: ", ")
+        var literalTag = "";
+        
+       /* for tag in (self.book?.tags?.allObjects)!{
+            literalTag = (tag as! Tag).title! +  "," + literalTag
+        }
+        
+        lbTags.text = literalTag*/
     
     }
     
@@ -100,6 +108,7 @@ extension BookViewCell{
     func unsubscribeChangeStateBook(){
         let nc = NotificationCenter.default
         nc.removeObserver(self)
+        self.book = nil
     }
     
 }
