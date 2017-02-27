@@ -17,16 +17,17 @@ extension LibraryController: NSFetchedResultsControllerDelegate{
         if _fetchedResultsController != nil {
             return _fetchedResultsController!
         }
-      /*  _fetchedResultsController = NSFetchedResultsController(fetchRequest: Book.fetchRequestOrderedByName(),
+       /* _fetchedResultsController = NSFetchedResultsController(fetchRequest: Book.fetchRequestOrderedByName(),
                                                                managedObjectContext: self.context!,
-                                                               sectionNameKeyPath: nil,
+                                                               sectionNameKeyPath: "tags.title",
                                                                cacheName: "Master")*/
         
         _fetchedResultsController = NSFetchedResultsController(fetchRequest: Tag.fetchRequestTags(),
                                     managedObjectContext: self.context!,
                                     sectionNameKeyPath: nil,
                                     cacheName: "Master")
-
+        
+       
         _fetchedResultsController?.delegate = self
         
         do {

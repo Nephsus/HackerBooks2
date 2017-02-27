@@ -23,7 +23,7 @@ extension Tag: ManagedObjectType{
         
         fetchRequest.sortDescriptors = [sortDescriptor]
         
-        fetchRequest.predicate = NSPredicate(format: " title = '@%'", title)
+        fetchRequest.predicate = NSPredicate(format: " title == %@", title)
         
         
         return fetchRequest

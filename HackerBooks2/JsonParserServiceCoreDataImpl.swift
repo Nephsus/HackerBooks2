@@ -67,7 +67,8 @@ func decode( withDictionary dictionary: Dictionary<String,String> ) -> Void{
     
     for value in tags!{
         
-       let queryRequest = Tag.fetchRequestTagByTitle( value.uppercased() )
+       let key = value.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).uppercased()
+       let queryRequest = Tag.fetchRequestTagByTitle( key )
         
          let result = try! context.fetch( queryRequest )
         

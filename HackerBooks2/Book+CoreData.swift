@@ -20,8 +20,10 @@ extension Book: ManagedObjectType{
         fetchRequest.fetchBatchSize = 20
         
         let sortDescriptor = NSSortDescriptor(key: "title", ascending: true)
-        
-        fetchRequest.sortDescriptors = [sortDescriptor]
+        let sortTag = NSSortDescriptor(key: "tags.title", ascending: true)
+        //fetchRequest.sortDescriptors = [sortDescriptor]
+       
+        fetchRequest.sortDescriptors = [sortTag, sortDescriptor]
         
         return fetchRequest
     }

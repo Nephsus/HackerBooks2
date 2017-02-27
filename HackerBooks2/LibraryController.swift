@@ -26,7 +26,7 @@ class LibraryController: UIViewController, UITableViewDataSource, UITableViewDel
         self.tableView.register(cell, forCellReuseIdentifier: BookViewCell.CELLID)
 
         
-        let initialInteractor = GetBooksInteractor()
+      /* let initialInteractor = GetBooksInteractor()
         
         initialInteractor.context = context
         
@@ -39,25 +39,31 @@ class LibraryController: UIViewController, UITableViewDataSource, UITableViewDel
             DispatchQueue.main.async {
                 progressHUD.hide()
             }
-        }
+        }*/
         
     }
 
      func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return (self.fetchedResultsController.fetchedObjects?.count)!
-
         
+    
+        
+        print("elleeee: \(self.fetchedResultsController.sections?.count)")
+        return (self.fetchedResultsController.fetchedObjects?.count)!
     }
     
      func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-      // let sectionInfo = self.fetchedResultsController.sections![section]
-       // return sectionInfo.numberOfObjects
+       //let sectionInfo = self.fetchedResultsController.sections![section]
+       //return sectionInfo.numberOfObjects
         
-         let tag = self.fetchedResultsController.object(at: IndexPath(row: section + 1, section: 0))
+            let tag = self.fetchedResultsController.object(at: IndexPath(row: section  , section: 0))
+           //let tag = self.fetchedResultsController.fetchedObjects.
+           print("tags \(tag.title)  \(tag.books?.count)")
+        
+           return  (tag.books?.count)!
         
         
-         return (tag.books?.count)!
+         //return (tag.books?.count)!
         
         
          //let tag = self.fetchedResultsController.indexPath(forObject: <#T##Tag#>)
@@ -71,16 +77,35 @@ class LibraryController: UIViewController, UITableViewDataSource, UITableViewDel
        // let cell = tableView.dequeueReusableCell(withIdentifier: BookViewCell.CELLID) as! BookViewCell
        // cell.startView(book: book)
         //Devolverla
+        print("Fila \(indexPath.row)  \(indexPath.section)")
         
-        let tag = self.fetchedResultsController.object(at: indexPath)
+        let tag = self.fetchedResultsController.object(at: IndexPath(row: indexPath.section, section: 0))
+        
+         print("TAG \(tag.title)")
         
         let cell = tableView.dequeueReusableCell(withIdentifier: BookViewCell.CELLID) as! BookViewCell
-        cell.lbTitle.text = tag.title
+        
+        let books = tag.books?.allObjects
+        
+        let book =  books?[indexPath.row] as! Book
+        
+        //cell.lbTitle.text = book.title
+       
+        cell.startView(book: book)
+       
         
         return cell
 
         
         
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        
+        let tag = self.fetchedResultsController.object(at: IndexPath(row: section, section: 0))
+
+        
+        return tag.title
     }
     
      func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -107,13 +132,8 @@ class LibraryController: UIViewController, UITableViewDataSource, UITableViewDel
     
 
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        
-        
         (cell as! BookViewCell).unsubscribeChangeStateBook()
-        
-        
-        
-        
+ 
     }
 
 
