@@ -1,35 +1,31 @@
 //
-//  LibraryController+NSFetchedResultsControllerDelegate.swift
+//  ResultsController+FetchedResultsController.swift
 //  HackerBooks2
 //
-//  Created by David Cava Jimenez on 24/2/17.
+//  Created by David Cava Jimenez on 1/3/17.
 //  Copyright © 2017 David Cava Jimenez. All rights reserved.
 //
 
 import Foundation
+
+
+import Foundation
 import CoreData
 
-
-
-extension LibraryController: NSFetchedResultsControllerDelegate{
-
-    var fetchedResultsController: NSFetchedResultsController<Tag> {
+extension ResultsController: NSFetchedResultsControllerDelegate {
+    
+    var fetchedResultsController: NSFetchedResultsController<Book> {
         if _fetchedResultsController != nil {
             return _fetchedResultsController!
         }
         
-        _fetchedResultsController = NSFetchedResultsController(fetchRequest: Tag.fetchRequestTags(),
-                                    managedObjectContext: self.context!,
-                                    sectionNameKeyPath: nil,
-                                    cacheName: nil)
-        
-       
+        // Edit the section name key path and cache name if appropriate.
+        // nil for section name key path means "no sections".
+        _fetchedResultsController = NSFetchedResultsController(fetchRequest: Book.fetchRequestFilter(searchText: searchText), managedObjectContext: self.context!, sectionNameKeyPath: nil, cacheName: nil)
         _fetchedResultsController?.delegate = self
         
         do {
-            
             try _fetchedResultsController!.performFetch()
-            
         } catch {
             let nserror = error as NSError
             fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
@@ -39,6 +35,7 @@ extension LibraryController: NSFetchedResultsControllerDelegate{
     }
     
     // MARK: - NSFetchedResultController delegate
+    
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         
@@ -60,9 +57,9 @@ extension LibraryController: NSFetchedResultsControllerDelegate{
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         switch type {
         case .insert:
-           self.tableView.insertRows(at: [newIndexPath!], with: .fade)
+            self.tableView.insertRows(at: [newIndexPath!], with: .fade)
         case .delete:
-           self.tableView.deleteRows(at: [indexPath!], with: .fade)
+            self.tableView.deleteRows(at: [indexPath!], with: .fade)
         default:
             break
         }
@@ -72,8 +69,6 @@ extension LibraryController: NSFetchedResultsControllerDelegate{
         self.tableView.endUpdates()
     }
 
-
-
-
-
+    
+    
 }

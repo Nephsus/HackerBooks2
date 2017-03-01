@@ -18,6 +18,9 @@ class UtilsStatics{
     
     }
     
+    public static let BookNotification = Notification.Name(rawValue: "BookLoaded" )
+    public static let bookCoverImage = Notification.Name(rawValue: "BookCoverImage" )
+    
     
 
 

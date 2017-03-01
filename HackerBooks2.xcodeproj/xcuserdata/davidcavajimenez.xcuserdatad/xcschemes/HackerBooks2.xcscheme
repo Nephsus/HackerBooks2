@@ -63,11 +63,11 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "-com.apple.CoreData.SQLDebug 1"
+            argument = "-com.apple.CoreData.SQLDebug 3"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "-com.apple.CoreData.Logging.stderr 1"
+            argument = "-com.apple.CoreData.Logging.stderr 3"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

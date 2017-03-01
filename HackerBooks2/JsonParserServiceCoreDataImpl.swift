@@ -58,7 +58,8 @@ func decode( withDictionary dictionary: Dictionary<String,String> ) -> Void{
     let libro : Book = context.insertObject()
     //Inizializo por pattern maching
     (libro.authors,libro.imageurl,libro.pdfurl,libro.title) = (authors,imageurl, pdfurl, title)
-  
+   
+    
     for value in tags!{
         
        let key = value.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).uppercased()

@@ -10,10 +10,17 @@ import UIKit
 import CoreData
 import HTProgressHUD
 
-class LibraryController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class LibraryController: UIViewController, UITableViewDataSource, UITableViewDelegate, TableRefresh, UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating  {
     
     var context : NSManagedObjectContext!
-     var _fetchedResultsController: NSFetchedResultsController<Tag>? = nil
+    var _fetchedResultsController: NSFetchedResultsController<Tag>? = nil
+    var bookSelected : Book!
+    
+    var searchController: UISearchController!
+    
+    var resultsController : ResultsController!
+    
+    var favoritesBooks : [Book]?
 
     @IBOutlet weak var tableView: UITableView!
     
@@ -21,60 +28,132 @@ class LibraryController: UIViewController, UITableViewDataSource, UITableViewDel
     override func viewDidLoad() {
         super.viewDidLoad()
         
+       
+        
         let cell = UINib(nibName: "BookViewCell", bundle: nil)
-        
         self.tableView.register(cell, forCellReuseIdentifier: BookViewCell.CELLID)
-
         
+         loadFavoritesBooks()
+        
+        resultsController = ResultsController()
+        resultsController.context = self.context
+        searchController = UISearchController(searchResultsController: resultsController)
+        searchController.searchResultsUpdater = self
+        searchController.searchBar.sizeToFit()
+        tableView.tableHeaderView = searchController.searchBar
+        
+        searchController.delegate = self
+        searchController.dimsBackgroundDuringPresentation = false // default is YES
+        searchController.searchBar.delegate = self
+ 
+         definesPresentationContext = true
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.title="HACKERBOOKS"
+    }
+    
+    // MARK: - UISearchBarDelegate
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+    // MARK: - UISearchControllerDelegate
+    
+    func presentSearchController(_ searchController: UISearchController) {
+        //debugPrint("UISearchControllerDelegate invoked method: \(__FUNCTION__).")
+    }
+    
+    func willPresentSearchController(_ searchController: UISearchController) {
+        //debugPrint("UISearchControllerDelegate invoked method: \(__FUNCTION__).")
+    }
+    
+    func didPresentSearchController(_ searchController: UISearchController) {
+        //debugPrint("UISearchControllerDelegate invoked method: \(__FUNCTION__).")
+    }
+    
+    func willDismissSearchController(_ searchController: UISearchController) {
+        //debugPrint("UISearchControllerDelegate invoked method: \(__FUNCTION__).")
+    }
+    
+    func didDismissSearchController(_ searchController: UISearchController) {
+        //debugPrint("UISearchControllerDelegate invoked method: \(__FUNCTION__).")
+    }
+
+    
+    func updateSearchResults(for searchController: UISearchController) {
+       
+        resultsController._fetchedResultsController = nil
+        resultsController.searchText = searchController.searchBar.text
+        resultsController.tableView.reloadData()
+        
+    }
+    
+    
+    func loadFavoritesBooks(){
+        let queryRequest = Book.fetchRequestFavorites()
+        self.favoritesBooks = try! context.fetch( queryRequest )
+    
+    }
+    
+    func haveFavorites() -> Bool{
+        if (favoritesBooks?.count)! > 0 {
+            return true
+        }
+        return false
     }
 
      func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         
-    
-        
-        print("elleeee: \(self.fetchedResultsController.sections?.count)")
-        return (self.fetchedResultsController.fetchedObjects?.count)!
+        if haveFavorites(){
+            return ((self.fetchedResultsController.fetchedObjects?.count)! + 1)
+        }else{
+            return (self.fetchedResultsController.fetchedObjects?.count)!
+        }
     }
     
      func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-       //let sectionInfo = self.fetchedResultsController.sections![section]
-       //return sectionInfo.numberOfObjects
         
-            let tag = self.fetchedResultsController.object(at: IndexPath(row: section  , section: 0))
-           //let tag = self.fetchedResultsController.fetchedObjects.
-           print("tags \(tag.title)  \(tag.books?.count)")
+           //print("tags \(tag.title)  \(tag.books?.count)")
+        
+            if haveFavorites() && section == 0{
+                return (favoritesBooks?.count)!
+            }
+        
+        let tag: Tag
+        if haveFavorites(){
+            tag = self.fetchedResultsController.object(at: IndexPath(row: section - 1 , section: 0))
+        }else{
+            tag = self.fetchedResultsController.object(at: IndexPath(row: section, section: 0))
+        }
         
            return  (tag.books?.count)!
-        
-        
-         //return (tag.books?.count)!
-        
-        
-         //let tag = self.fetchedResultsController.indexPath(forObject: <#T##Tag#>)
-        
-     //   return 0
     }
     
     
      func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-       // let book = self.fetchedResultsController.object(at: indexPath)
-       // let cell = tableView.dequeueReusableCell(withIdentifier: BookViewCell.CELLID) as! BookViewCell
-       // cell.startView(book: book)
-        //Devolverla
-        print("Fila \(indexPath.row)  \(indexPath.section)")
-        
-        let tag = self.fetchedResultsController.object(at: IndexPath(row: indexPath.section, section: 0))
-        
-         print("TAG \(tag.title)")
-        
+
         let cell = tableView.dequeueReusableCell(withIdentifier: BookViewCell.CELLID) as! BookViewCell
+        let book : Book
         
-        let books = tag.books?.allObjects
-        
-        let book =  books?[indexPath.row] as! Book
-        
-        //cell.lbTitle.text = book.title
+        if haveFavorites() && indexPath.section == 0{
+            book =  (favoritesBooks?[ indexPath.row ])!
+        }else{
+            let tag: Tag
+            
+            if haveFavorites(){
+                tag = self.fetchedResultsController.object(at: IndexPath(row: indexPath.section - 1, section: 0))
+                let books = tag.books?.allObjects.sorted(by: { ($0 as! Book).title! < ($1 as! Book).title! })
+                book =  books?[indexPath.row] as! Book
+            }else{
+                tag = self.fetchedResultsController.object(at: IndexPath(row: indexPath.section, section: 0))
+                let books = tag.books?.allObjects.sorted(by: { ($0 as! Book).title! < ($1 as! Book).title! })
+                book =  books?[indexPath.row] as! Book
+            }
+            
+           
+        }
+
        
         cell.startView(book: book)
        
@@ -87,10 +166,18 @@ class LibraryController: UIViewController, UITableViewDataSource, UITableViewDel
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         
-        let tag = self.fetchedResultsController.object(at: IndexPath(row: section, section: 0))
-
+        if haveFavorites() && section == 0{
         
-        return tag.title
+            return "MIS FAVORITOS"
+        }else{
+            let tag: Tag
+            if haveFavorites(){
+                tag = self.fetchedResultsController.object(at: IndexPath(row: section - 1, section: 0))
+            }else{
+                tag = self.fetchedResultsController.object(at: IndexPath(row: section, section: 0))
+            }
+            return tag.title
+        }
     }
     
      func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -99,26 +186,55 @@ class LibraryController: UIViewController, UITableViewDataSource, UITableViewDel
         
     }
     
-    
-  /*   func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "prueba"
-        
-    }*/
-    
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-       /* let progressHUD : HTProgressHUD = HTProgressHUD();
-        progressHUD.text = "Cargando..."
-        progressHUD.show(in:  UIApplication.shared.delegate?.window! )*/
-
+        if haveFavorites() && indexPath.section == 0{
+           self.bookSelected = favoritesBooks?[indexPath.row]
+            
+        }else{
+            let tag : Tag
+            if haveFavorites() {
+                 tag = self.fetchedResultsController.object(at: IndexPath(row: indexPath.section - 1, section: 0))
+            }else{
+                 tag = self.fetchedResultsController.object(at: IndexPath(row: indexPath.section, section: 0))
+            }
+                let books = tag.books?.allObjects
+                self.bookSelected =  books?[indexPath.row] as! Book
+        }
+        
+        self.performSegue(withIdentifier: "DetailBook", sender: self)
+        
         
     }
     
 
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        (cell as! BookViewCell).unsubscribeChangeStateBook()
+        (cell as! BookViewCell).stopObserving()
  
+    }
+    
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "DetailBook"{
+        
+            let vc = segue.destination as! DetailBookControllerViewController
+            vc.context = context
+            vc.model = bookSelected
+            vc.delegado = self
+            
+        }
+        
+    }
+    
+    
+    //MARK: Protocolo de refresco debido a un cambio de estado del libro
+    func reloadDataByRefreshState() {
+        loadFavoritesBooks()
+        DispatchQueue.main.async {
+            
+            self.tableView.reloadData()
+        }
+        
     }
 
 

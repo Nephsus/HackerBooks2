@@ -15,13 +15,17 @@ class LoadingController: UIViewController {
      var context : NSManagedObjectContext!
     
      var progressHUD : HTProgressHUD = HTProgressHUD();
+    
+    
+    
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         
         progressHUD.text = "Cargando..."
-        progressHUD.show(in:  UIApplication.shared.delegate?.window! )
+        progressHUD.show(in:  self.view )
 
         let defaults = UserDefaults.standard
         

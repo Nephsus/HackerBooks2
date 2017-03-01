@@ -20,14 +20,38 @@ extension Book: ManagedObjectType{
         fetchRequest.fetchBatchSize = 20
         
         let sortDescriptor = NSSortDescriptor(key: "title", ascending: true)
-        let sortTag = NSSortDescriptor(key: "tags.title", ascending: true)
-        //fetchRequest.sortDescriptors = [sortDescriptor]
-       
-        fetchRequest.sortDescriptors = [sortTag, sortDescriptor]
+        fetchRequest.sortDescriptors = [sortDescriptor]
+
+        return fetchRequest
+    }
+
+
+    class func fetchRequestFavorites() -> NSFetchRequest<Book> {
+        let fetchRequest: NSFetchRequest<Book> = Book.fetchRequest()
+        fetchRequest.fetchBatchSize = 20
+        let sortDescriptor = NSSortDescriptor(key: "title", ascending: true)
+        
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        fetchRequest.predicate = NSPredicate(format: " favorito == YES")
+
+        return fetchRequest
+    }
+    
+    
+    class func fetchRequestFilter(searchText: String ) -> NSFetchRequest<Book> {
+        let fetchRequest: NSFetchRequest<Book> = Book.fetchRequest()
+        fetchRequest.fetchBatchSize = 20
+        let sortDescriptor = NSSortDescriptor(key: "title", ascending: true)
+        
+        fetchRequest.sortDescriptors = [sortDescriptor]
+       // fetchRequest.predicate = NSPredicate(format: " title CONTAINS[cd]  %@ OR Tag.title CONTAINS[cd] %@", searchText, searchText)
+        fetchRequest.predicate = NSPredicate(format: "ANY tags.title CONTAINS[cd] %@", searchText)
+        fetchRequest.returnsDistinctResults = true
         
         return fetchRequest
     }
 
 
-
+    
+   
 }

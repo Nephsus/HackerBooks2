@@ -19,11 +19,16 @@ class BookViewCell: UITableViewCell {
 
     @IBOutlet weak var lbTags: UILabel!
     
-    public var book: Book?
+    public var _book: Book?
     
     static let defaultImageAsData = try! Data(contentsOf: Bundle.main.url(forResource: "noImage", withExtension: "png")!)
 
-
+    private
+    let _nc = NotificationCenter.default
+    public var _bookObserver : NSObjectProtocol?
+    
+    
+    
     static func heightForBooCell() -> CGFloat{
     
        return CGFloat( 66 )
@@ -32,34 +37,30 @@ class BookViewCell: UITableViewCell {
     
     
     func startView(book: Book){
-        self.book = book
+       /* self._book = book
+        
+        
+        print("/7/////////////////////STARVIEW @%", self.book?.title )
+        
         subscribeChangeStateBook()
-        
-       let asyncData = AsyncData(url:  URL(string: (self.book?.imageurl)!)!,
-                                 defaultData: BookViewCell.defaultImageAsData)
-        asyncData.delegate = book
-        
-        self.book?.asyncData = asyncData
-        
-        
+        syncModelWithView()*/
+        _book = book
+      /*  _nc.addObserver(forName: UtilsStatics.BookNotification, object: _book, queue: nil) { (n: Notification) in
+            self.syncModelWithView()
+        }*/
+        subscribeChangeStateBook()
         syncModelWithView()
+        
         
     }
     
     func syncModelWithView(){
         
-      /*  if ( book != nil && book?.asyncData != nil ){
-            coverImage.image = UIImage(data: (book?.asyncData.data)!)
-        }*/
+ 
+        coverImage.image = UIImage(data: (_book?.asyncData.data)!)
         coverImage.clipsToBounds = true
-        lbTitle.text = self.book?.title
-        var literalTag = "";
-        
-       /* for tag in (self.book?.tags?.allObjects)!{
-            literalTag = (tag as! Tag).title! +  "," + literalTag
-        }
-        
-        lbTags.text = literalTag*/
+        lbTitle.text = self._book?.title
+        lbTags.text = _book?.authors
     
     }
     
@@ -71,12 +72,29 @@ class BookViewCell: UITableViewCell {
     }
     
     override func prepareForReuse() {
-          unsubscribeChangeStateBook()
-          syncModelWithView()
+         /// print("++++++++++++++++++++++++++++++++++++++++ prepareForReuse @%", self.book?.title )
+
+      /*    unsubscribeChangeStateBook()
+          syncModelWithView()*/
+        
+        stopObserving()
+        syncModelWithView()
+    }
+    
+    func stopObserving(){
+        
+        if let observer = _bookObserver{
+            print("++++++++++++++++++++++++++++++++++++++++ borro observer" )
+            _nc.removeObserver(observer)
+            _bookObserver = nil
+            //_book = nil
+        }
+        
     }
     
     deinit {
-          unsubscribeChangeStateBook()
+          //unsubscribeChangeStateBook()
+        stopObserving()
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -93,10 +111,19 @@ extension BookViewCell{
     func subscribeChangeStateBook(){
         let nc = NotificationCenter.default
         
-        nc.addObserver(forName: Notification.Name(rawValue: "BookLoaded" ), object: self.book, queue: OperationQueue.main) {
+        _bookObserver = nc.addObserver(forName: UtilsStatics.BookNotification,
+                       object: self._book,
+                       queue: nil) {
                       (nc) in
-        let userInfo = nc.userInfo
-        self.book = userInfo?[Notification.Name(rawValue: "BookCoverImage" )] as! Book?
+        
+       /* let userInfo = nc.userInfo
+            
+        print("*********************************************** BOOK ANTES %@", self._book?.title )
+            
+       // self._book = userInfo?[UtilsStatics.bookCoverImage] as! Book?
+            
+        print("*********************************************** BOOK DESPPUES %@", self._book?.title )*/
+            
         self.syncModelWithView()
             
 
@@ -105,11 +132,11 @@ extension BookViewCell{
         
     }
     
-    func unsubscribeChangeStateBook(){
+   /* func unsubscribeChangeStateBook(){
         let nc = NotificationCenter.default
         nc.removeObserver(self)
-        self.book = nil
-    }
+        //self.book = nil
+    }*/
     
 }
 

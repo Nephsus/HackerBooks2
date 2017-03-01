@@ -26,11 +26,10 @@ public class GetBooksInteractor{
             
             service.decode(withDataJson:  data! )
           
-            do{
-              try  self.context.save()
-            }catch{
-               fatalError("Error a la hora de salvar")
-            }
+          
+            
+            
+            
             if  finishedBlock != nil{
                         finishedBlock!()
             }

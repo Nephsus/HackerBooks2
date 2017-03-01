@@ -13,20 +13,22 @@ import ObjectiveC
 private var asyncKey: UInt8 = 0 // We still need this boilerplate
 
 extension Book : AsyncDataDelegate {
+  
     
-   // static let BookNotification = Notification.Name(rawValue: "BookLoaded" )
-   // static let bookCoverImage = Notification.Name(rawValue: "BookCoverImage" )
-    
-    
-    
-    
-    var asyncData: AsyncData { // cat is *effectively* a stored property
+    var asyncData: AsyncData {
         get {
-            return objc_getAssociatedObject(self,&asyncKey) as! AsyncData
+            if ( objc_getAssociatedObject(self,&asyncKey) == nil){
+                let asyncData = AsyncData(url:  URL(string: (self.imageurl)!)!, defaultData: BookViewCell.defaultImageAsData)
+                asyncData.delegate = self
+                self.asyncData  = asyncData
+
+            }
+            
+            return  objc_getAssociatedObject(self,&asyncKey) as! AsyncData
+  
         }
-        set { //objc_setAssociatedObject(self, &asyncKey, value: newValue,
-        
-           objc_setAssociatedObject(self, &asyncKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        set {
+            objc_setAssociatedObject(self, &asyncKey, newValue, .OBJC_ASSOCIATION_RETAIN)
         }
         
     }
@@ -36,8 +38,8 @@ extension Book : AsyncDataDelegate {
         //Ya tengo la cover Image¡¡¡¡
         let nc = NotificationCenter.default
         // Creas un objeto notification
-        let notification = Notification(name:Notification.Name(rawValue: "BookLoaded" ),
-                                        object: self, userInfo: [ Notification.Name(rawValue: "BookCoverImage" ): self])
+        let notification = Notification(name:UtilsStatics.BookNotification,
+                                        object: self, userInfo: [UtilsStatics.bookCoverImage: self])
         nc.post( notification )
     }
 }
