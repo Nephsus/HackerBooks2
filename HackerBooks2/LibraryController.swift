@@ -46,7 +46,23 @@ class LibraryController: UIViewController, UITableViewDataSource, UITableViewDel
         searchController.dimsBackgroundDuringPresentation = false // default is YES
         searchController.searchBar.delegate = self
  
-         definesPresentationContext = true
+        definesPresentationContext = true
+        
+        if self.splitViewController != nil {
+            let detail = (self.splitViewController?.viewControllers.last as! UINavigationController).topViewController as! DetailBookControllerViewController
+            if haveFavorites(){
+                detail.model = self.favoritesBooks?[0]
+            }else{
+                let tag = self.fetchedResultsController.object(at: IndexPath(row: 0 , section: 0))
+                let books = tag.books?.allObjects.sorted(by: { ($0 as! Book).title! < ($1 as! Book).title! })
+                let book =  books?[0] as! Book
+
+                  detail.model = book
+            }
+           detail.context = context
+            
+        }
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {

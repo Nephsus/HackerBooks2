@@ -39,18 +39,19 @@ class PdfViewController: UIViewController, WKUIDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear( animated )
+        
         defaultImageAsData = try! Data(contentsOf: Bundle.main.url(forResource: "pdftest", withExtension: "pdf")!)
         let webConfiguration = WKWebViewConfiguration()
         wkWebView = WKWebView(frame:  lereView.frame, configuration: webConfiguration)
         wkWebView.uiDelegate = self
         self.lereView.addSubview( wkWebView )
-
+        
         syncModelView()
 
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+       super.viewWillDisappear(animated)
         defaultImageAsData = nil
         self.wkWebView.loadHTMLString("", baseURL: nil)
         self.wkWebView.stopLoading()
