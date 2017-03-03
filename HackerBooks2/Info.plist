@@ -42,5 +42,7 @@
 	</array>
     <key>NSLocationWhenInUseUsageDescription</key>
     <string>Voy a sacarte la localizacion</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Se requiere acceso a la galería de fotos</string>
 </dict>
 </plist>

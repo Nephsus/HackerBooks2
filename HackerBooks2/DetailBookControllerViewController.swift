@@ -56,7 +56,7 @@ class DetailBookControllerViewController: UIViewController, UISplitViewControlle
     override func viewDidLoad() {
         super.viewDidLoad()
 
-       // syncModelView()
+        syncModelView()
         
         // Do any additional setup after loading the view.
     }

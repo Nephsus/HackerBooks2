@@ -76,25 +76,27 @@ class LoadingController: UIViewController {
         //Aquí es donde recupero el splitview y le digo que su delegado es el controller de detalle DetailBookController,
         //pero no me salta el método 
         
+       
+        
         let destinationViewController : UIViewController = segue.destination;
         
         let splitViewController : UISplitViewController = destinationViewController as! UISplitViewController;
+        
+        let primaryNavigationController : UINavigationController = splitViewController.viewControllers.first as! UINavigationController
+        
+        (primaryNavigationController.topViewController as! LibraryController).context = context
+        
         let navigationController : UINavigationController = splitViewController.viewControllers.last as! UINavigationController
         
         navigationController.topViewController!.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem
         
-        splitViewController.delegate =  navigationController.topViewController as! UISplitViewControllerDelegate?; //le seteo el deatail como DetailBookController como delegate y nada¡¡
+        splitViewController.delegate =  navigationController.topViewController as! UISplitViewControllerDelegate?;
         
         let  window = UIApplication.shared.keyWindow;
-        
-        
-            
-            window?.rootViewController = destinationViewController;
-            
-
+        window?.rootViewController = destinationViewController;
             
         
-
+        
         
         
   

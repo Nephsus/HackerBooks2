@@ -28,12 +28,12 @@ class LibraryController: UIViewController, UITableViewDataSource, UITableViewDel
     override func viewDidLoad() {
         super.viewDidLoad()
         
-       self.navigationItem.leftBarButtonItem = self.editButtonItem
+
         
-        /*let cell = UINib(nibName: "BookViewCell", bundle: nil)
+        let cell = UINib(nibName: "BookViewCell", bundle: nil)
         self.tableView.register(cell, forCellReuseIdentifier: BookViewCell.CELLID)
         
-         loadFavoritesBooks()
+        loadFavoritesBooks()
         
         resultsController = ResultsController()
         resultsController.context = self.context
@@ -46,7 +46,7 @@ class LibraryController: UIViewController, UITableViewDataSource, UITableViewDel
         searchController.dimsBackgroundDuringPresentation = false // default is YES
         searchController.searchBar.delegate = self
  
-         definesPresentationContext = true*/
+         definesPresentationContext = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -105,12 +105,11 @@ class LibraryController: UIViewController, UITableViewDataSource, UITableViewDel
 
      func numberOfSections(in tableView: UITableView) -> Int {
         
-      /*  if haveFavorites(){
+        if haveFavorites(){
             return ((self.fetchedResultsController.fetchedObjects?.count)! + 1)
         }else{
             return (self.fetchedResultsController.fetchedObjects?.count)!
-        }*/
-        return 0
+        }
     }
     
      func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -218,7 +217,8 @@ class LibraryController: UIViewController, UITableViewDataSource, UITableViewDel
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "DetailBook"{
         
-            let vc = segue.destination as! DetailBookControllerViewController
+            let nc = segue.destination as! UINavigationController
+            let vc = nc.topViewController as! DetailBookControllerViewController
             vc.context = context
             vc.model = bookSelected
             vc.delegado = self
