@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class DetailBookControllerViewController: UIViewController {
+class DetailBookControllerViewController: UIViewController, UISplitViewControllerDelegate  {
     
     var model : Book!
     var context : NSManagedObjectContext!
@@ -56,7 +56,7 @@ class DetailBookControllerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        syncModelView()
+       // syncModelView()
         
         // Do any additional setup after loading the view.
     }
@@ -118,5 +118,25 @@ class DetailBookControllerViewController: UIViewController {
         
     }
 
+    func splitViewController(_ splitViewController: UISplitViewController, collapseSecondary secondaryViewController:UIViewController, onto primaryViewController:UIViewController) -> Bool {
+        return true
+    }
+
+    func primaryViewController(forCollapsing splitViewController: UISplitViewController) -> UIViewController? {
+        print("dfsadf")
+        return nil
+    }
+  
+    
+    func primaryViewController(forExpanding splitViewController: UISplitViewController) -> UIViewController? {
+        print("dafsdf")
+        return nil
+    }
+
+    func splitViewController(_ splitViewController: UISplitViewController, separateSecondaryFrom primaryViewController: UIViewController) -> UIViewController? {
+        print("fdfd")
+        return nil
+    }
+   
 
 }
