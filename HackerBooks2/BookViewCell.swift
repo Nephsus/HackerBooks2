@@ -132,11 +132,11 @@ extension BookViewCell{
         
     }
     
-   /* func unsubscribeChangeStateBook(){
+    func unsubscribeChangeStateBook(){
         let nc = NotificationCenter.default
         nc.removeObserver(self)
         //self.book = nil
-    }*/
+    }
     
 }
 

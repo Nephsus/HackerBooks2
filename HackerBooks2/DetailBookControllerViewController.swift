@@ -28,6 +28,9 @@ class DetailBookControllerViewController: UIViewController, UISplitViewControlle
     @IBOutlet weak var btnFavoriteOutlet: UIButton!
     
     @IBOutlet weak var coverImage: UIImageView!
+    
+    public static let favoriteBookNotification = Notification.Name(rawValue: "favoriteBookChangeState" )
+    public static let keyFavorite = Notification.Name(rawValue: "keyBookChangeState" )
 
     
     @IBAction func btnFavorite(_ sender: AnyObject) {
@@ -44,7 +47,7 @@ class DetailBookControllerViewController: UIViewController, UISplitViewControlle
         
        try! context.save()
         
-       // notification()
+        notification()
         guard let haveDelegate = self.delegado else {
             return
         }
@@ -58,30 +61,27 @@ class DetailBookControllerViewController: UIViewController, UISplitViewControlle
 
         syncModelView()
         
+        subscribeChangeStateBook()
+        
         // Do any additional setup after loading the view.
     }
     
-    
-
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear( animated )
+        unsubscribeChangeStateBook()
         
-        func syncModelView()  {
+    }
+  
+    func syncModelView()  {
             self.title = model.title
             self.lbTitle.text = model.title
             self.lbAuthors.text = model.authors
-            
-            
-            
+    
             for tag in Array(model.tags!) {
                 self.lbTags.text = (tag as! Tag).title
 
             }
-            
-            
-            // self.lbTags.text = model.tags.joined(separator: ",")
-            
-            
-            
-            
+
             if model.favorito  {
                 btnFavoriteOutlet.setImage( UIImage(named: "btn_check_on_holo_dark_triodos")   , for: .normal)
                 
@@ -91,12 +91,8 @@ class DetailBookControllerViewController: UIViewController, UISplitViewControlle
             }
 
             coverImage.image = UIImage(data: model.asyncData.data)
-            
         }
-        
-        
-    
-
+ 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -114,6 +110,45 @@ class DetailBookControllerViewController: UIViewController, UISplitViewControlle
         
     }
 
-    
+    func notification(){
+        
+        //Creas una instancia del NotificacionCenter
+        let nc = NotificationCenter.default
+        // Creas un objeto notification
+        let notification = Notification(name: DetailBookControllerViewController.favoriteBookNotification,
+                                        object: self, userInfo: [ DetailBookControllerViewController.keyFavorite : model])
+        
+        nc.post( notification )
+    }
 
+}
+
+
+extension DetailBookControllerViewController{
+    
+    func subscribeChangeStateBook(){
+        let nc = NotificationCenter.default
+        
+        nc.addObserver(forName: UtilsStatics.BookNotification,
+                                       object: self.model,
+                                       queue: nil) {
+                                        (nc) in
+                                      
+                                        DispatchQueue.main.async {
+                                             self.syncModelView()
+                                        }
+                                       
+                                        
+                                        
+                                        
+        }
+        
+    }
+    
+    func unsubscribeChangeStateBook(){
+        let nc = NotificationCenter.default
+        nc.removeObserver(self)
+        
+    }
+    
 }

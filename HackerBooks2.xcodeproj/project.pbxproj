@@ -34,7 +34,6 @@
 		5B6668B41E65A31600C11C99 /* Pdf+CoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6668B31E65A31600C11C99 /* Pdf+CoreData.swift */; };
 		5B6668B61E65BB5300C11C99 /* Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6668B51E65BB5300C11C99 /* Localization.swift */; };
 		5B6668B81E65E1AD00C11C99 /* MapController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6668B71E65E1AD00C11C99 /* MapController.swift */; };
-		5B6668BA1E65FBB600C11C99 /* PruebasViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6668B91E65FBB600C11C99 /* PruebasViewController.swift */; };
 		5B6668CD1E66BD1800C11C99 /* UIImage+Alpha.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B6668C81E66BD1800C11C99 /* UIImage+Alpha.m */; };
 		5B6668CE1E66BD1800C11C99 /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B6668CA1E66BD1800C11C99 /* UIImage+Resize.m */; };
 		5B6668CF1E66BD1800C11C99 /* UIImage+RoundedCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B6668CC1E66BD1800C11C99 /* UIImage+RoundedCorner.m */; };
@@ -86,7 +85,6 @@
 		5B6668B31E65A31600C11C99 /* Pdf+CoreData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Pdf+CoreData.swift"; sourceTree = "<group>"; };
 		5B6668B51E65BB5300C11C99 /* Localization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Localization.swift; sourceTree = "<group>"; };
 		5B6668B71E65E1AD00C11C99 /* MapController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapController.swift; sourceTree = "<group>"; };
-		5B6668B91E65FBB600C11C99 /* PruebasViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PruebasViewController.swift; sourceTree = "<group>"; };
 		5B6668BD1E66B84800C11C99 /* HackerBooks2-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HackerBooks2-Bridging-Header.h"; sourceTree = "<group>"; };
 		5B6668C71E66BD1800C11C99 /* UIImage+Alpha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Alpha.h"; sourceTree = "<group>"; };
 		5B6668C81E66BD1800C11C99 /* UIImage+Alpha.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Alpha.m"; sourceTree = "<group>"; };
@@ -216,6 +214,7 @@
 		5B87674B1E5F5AEB00EFB42C /* HackerBooks2 */ = {
 			isa = PBXGroup;
 			children = (
+				5BA0B3EF1E6C77A600B9AABA /* Storyboards */,
 				5B66689F1E6571EB00C11C99 /* Protocols */,
 				5B37DC621E60B8C50054877F /* Resources */,
 				5B37DC5F1E60B88F0054877F /* Frameworks */,
@@ -230,9 +229,7 @@
 				5B87675F1E5F5B0300EFB42C /* Store */,
 				5B87675E1E5F5AF900EFB42C /* CoreDataStack */,
 				5B87674C1E5F5AEB00EFB42C /* AppDelegate.swift */,
-				5B8767501E5F5AEB00EFB42C /* Main.storyboard */,
 				5B8767531E5F5AEB00EFB42C /* Assets.xcassets */,
-				5B8767551E5F5AEB00EFB42C /* LaunchScreen.storyboard */,
 				5B8767581E5F5AEB00EFB42C /* Info.plist */,
 			);
 			path = HackerBooks2;
@@ -314,19 +311,83 @@
 		5B87677C1E5F6C9F00EFB42C /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				5BA0B3F61E6C87B500B9AABA /* ResultsController */,
+				5BA0B3F51E6C87A700B9AABA /* MapController */,
+				5BA0B3F41E6C879400B9AABA /* DetailBookController */,
+				5BA0B3F31E6C878600B9AABA /* PdfController */,
+				5BA0B3F21E6C877300B9AABA /* LibraryController */,
+				5BA0B3F11E6C876100B9AABA /* LoadingController */,
+				5BA0B3F01E6C874C00B9AABA /* AddAnnotationsController */,
 				5B6668A41E65820300C11C99 /* AnnotationsController */,
-				5B6668A21E657E7300C11C99 /* PdfViewController.swift */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		5BA0B3EF1E6C77A600B9AABA /* Storyboards */ = {
+			isa = PBXGroup;
+			children = (
+				5B8767551E5F5AEB00EFB42C /* LaunchScreen.storyboard */,
+				5B8767501E5F5AEB00EFB42C /* Main.storyboard */,
+			);
+			name = Storyboards;
+			sourceTree = "<group>";
+		};
+		5BA0B3F01E6C874C00B9AABA /* AddAnnotationsController */ = {
+			isa = PBXGroup;
+			children = (
+				5B6668AF1E6595FE00C11C99 /* AddAnnotationsController.swift */,
+			);
+			name = AddAnnotationsController;
+			sourceTree = "<group>";
+		};
+		5BA0B3F11E6C876100B9AABA /* LoadingController */ = {
+			isa = PBXGroup;
+			children = (
+				63D69E241E646095009934B5 /* LoadingController.swift */,
+			);
+			name = LoadingController;
+			sourceTree = "<group>";
+		};
+		5BA0B3F21E6C877300B9AABA /* LibraryController */ = {
+			isa = PBXGroup;
+			children = (
 				5B87674E1E5F5AEB00EFB42C /* LibraryController.swift */,
 				5B37DC561E60A2160054877F /* LibraryController+NSFetchedResultsControllerDelegate.swift */,
-				63D69E241E646095009934B5 /* LoadingController.swift */,
+			);
+			name = LibraryController;
+			sourceTree = "<group>";
+		};
+		5BA0B3F31E6C878600B9AABA /* PdfController */ = {
+			isa = PBXGroup;
+			children = (
+				5B6668A21E657E7300C11C99 /* PdfViewController.swift */,
+			);
+			name = PdfController;
+			sourceTree = "<group>";
+		};
+		5BA0B3F41E6C879400B9AABA /* DetailBookController */ = {
+			isa = PBXGroup;
+			children = (
 				5B66689D1E655E5600C11C99 /* DetailBookControllerViewController.swift */,
-				5B6668AF1E6595FE00C11C99 /* AddAnnotationsController.swift */,
+			);
+			name = DetailBookController;
+			sourceTree = "<group>";
+		};
+		5BA0B3F51E6C87A700B9AABA /* MapController */ = {
+			isa = PBXGroup;
+			children = (
 				5B6668B71E65E1AD00C11C99 /* MapController.swift */,
-				5B6668B91E65FBB600C11C99 /* PruebasViewController.swift */,
+			);
+			name = MapController;
+			sourceTree = "<group>";
+		};
+		5BA0B3F61E6C87B500B9AABA /* ResultsController */ = {
+			isa = PBXGroup;
+			children = (
 				5B4D109D1E67184E00E0961C /* ResultsController.swift */,
 				5B4D109F1E671E6700E0961C /* ResultsController+FetchedResultsController.swift */,
 			);
-			name = Controllers;
+			name = ResultsController;
 			sourceTree = "<group>";
 		};
 		ED073D26D460B69C1F5B8EF1 /* Frameworks */ = {
@@ -485,7 +546,6 @@
 				5B8767791E5F633B00EFB42C /* UtilsStatics.swift in Sources */,
 				5B37DC571E60A2160054877F /* LibraryController+NSFetchedResultsControllerDelegate.swift in Sources */,
 				5B87674D1E5F5AEB00EFB42C /* AppDelegate.swift in Sources */,
-				5B6668BA1E65FBB600C11C99 /* PruebasViewController.swift in Sources */,
 				5B87677B1E5F634900EFB42C /* JsonParserServiceCoreDataImpl.swift in Sources */,
 				5B6668B81E65E1AD00C11C99 /* MapController.swift in Sources */,
 				5B6668A11E6571FD00C11C99 /* TableRefresh.swift in Sources */,

@@ -37,6 +37,7 @@ class LibraryController: UIViewController, UITableViewDataSource, UITableViewDel
         
         resultsController = ResultsController()
         resultsController.context = self.context
+        resultsController.tableView.delegate = self
         searchController = UISearchController(searchResultsController: resultsController)
         searchController.searchResultsUpdater = self
         searchController.searchBar.sizeToFit()
@@ -60,14 +61,24 @@ class LibraryController: UIViewController, UITableViewDataSource, UITableViewDel
                   detail.model = book
             }
            detail.context = context
-            
+           detail.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem
+        detail.navigationItem.leftItemsSupplementBackButton = true
+
         }
         
     }
     
     override func viewWillAppear(_ animated: Bool) {
         self.title="HACKERBOOKS"
+        subscribeChangeStateBook()
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        unsubscribeChangeStateBook()
+    }
+    
+    
+   
     
     // MARK: - UISearchBarDelegate
     
@@ -183,7 +194,6 @@ class LibraryController: UIViewController, UITableViewDataSource, UITableViewDel
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         
         if haveFavorites() && section == 0{
-        
             return "MIS FAVORITOS"
         }else{
             let tag: Tag
@@ -204,6 +214,10 @@ class LibraryController: UIViewController, UITableViewDataSource, UITableViewDel
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
+        
+        if tableView == self.tableView {
+        
+        
         if haveFavorites() && indexPath.section == 0{
            self.bookSelected = favoritesBooks?[indexPath.row]
             
@@ -214,8 +228,14 @@ class LibraryController: UIViewController, UITableViewDataSource, UITableViewDel
             }else{
                  tag = self.fetchedResultsController.object(at: IndexPath(row: indexPath.section, section: 0))
             }
-                let books = tag.books?.allObjects
+                let books = tag.books?.allObjects.sorted(by: { ($0 as! Book).title! < ($1 as! Book).title! })
                 self.bookSelected =  books?[indexPath.row] as! Book
+         }
+        }else{
+        
+             self.bookSelected = resultsController.fetchedResultsController.object(at: indexPath)
+            
+        
         }
         
         self.performSegue(withIdentifier: "DetailBook", sender: self)
@@ -238,7 +258,8 @@ class LibraryController: UIViewController, UITableViewDataSource, UITableViewDel
             vc.context = context
             vc.model = bookSelected
             vc.delegado = self
-            
+            vc.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem
+            vc.navigationItem.leftItemsSupplementBackButton = true
         }
         
     }
@@ -259,5 +280,36 @@ class LibraryController: UIViewController, UITableViewDataSource, UITableViewDel
     }
 
 
+}
+
+extension LibraryController{
+    
+    func subscribeChangeStateBook(){
+        let nc = NotificationCenter.default
+        
+        nc.addObserver(forName: DetailBookControllerViewController.favoriteBookNotification,
+                       object: nil, queue: OperationQueue.main) { (nc) in
+                       // let userInfo = nc.userInfo
+                       // let book = userInfo?[DetailBookControllerViewController.keyFavorite ]
+                       self.loadFavoritesBooks()
+                        DispatchQueue.main.async {
+                             self.tableView.reloadData()
+                        }
+                       
+                        
+                        
+        }
+        
+    }
+    
+    func unsubscribeChangeStateBook(){
+        let nc = NotificationCenter.default
+        
+        nc.removeObserver(self)
+        
+    }
+    
+    
+    
 }
 

@@ -14,25 +14,24 @@ class PdfViewController: UIViewController, WKUIDelegate {
     var model : Book!
     var context : NSManagedObjectContext!
     
-    public var defaultImageAsData : Data!
+    public static var defaultImageAsData : Data! = try! Data(contentsOf: Bundle.main.url(forResource: "pdftest", withExtension: "pdf")!)
 
 
     
     @IBOutlet weak var webView: UIWebView!
     
-    @IBOutlet weak var lereView: UIView!
-   
-    var wkWebView: WKWebView!
+    
+    //var wkWebView: WKWebView!
     
     
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         self.navigationController?.navigationBar.backItem?.title = "Volver";
         self.edgesForExtendedLayout = UIRectEdge.init(rawValue: 0)
-
+        PdfViewController.defaultImageAsData  = try! Data(contentsOf: Bundle.main.url(forResource: "pdftest", withExtension: "pdf")!)
         //subscribe()
         
     }
@@ -40,11 +39,11 @@ class PdfViewController: UIViewController, WKUIDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear( animated )
         
-        defaultImageAsData = try! Data(contentsOf: Bundle.main.url(forResource: "pdftest", withExtension: "pdf")!)
-        let webConfiguration = WKWebViewConfiguration()
-        wkWebView = WKWebView(frame:  lereView.frame, configuration: webConfiguration)
-        wkWebView.uiDelegate = self
-        self.lereView.addSubview( wkWebView )
+        //defaultImageAsData = try! Data(contentsOf: Bundle.main.url(forResource: "pdftest", withExtension: "pdf")!)
+        //let webConfiguration = WKWebViewConfiguration()
+        //wkWebView = WKWebView(frame:  lereView.frame, configuration: webConfiguration)
+        //wkWebView.uiDelegate = self
+        //self.lereView.addSubview( wkWebView )
         
         syncModelView()
 
@@ -52,11 +51,16 @@ class PdfViewController: UIViewController, WKUIDelegate {
     
     override func viewWillDisappear(_ animated: Bool) {
        super.viewWillDisappear(animated)
-        defaultImageAsData = nil
-        self.wkWebView.loadHTMLString("", baseURL: nil)
+        PdfViewController.defaultImageAsData = nil
+        /*self.wkWebView.loadHTMLString("", baseURL: nil)
         self.wkWebView.stopLoading()
         self.wkWebView.uiDelegate = nil
-        self.wkWebView.removeFromSuperview()
+        self.wkWebView.removeFromSuperview()*/
+        
+        self.webView.loadHTMLString("", baseURL: nil)
+        self.webView.stopLoading()
+        self.webView.delegate = nil
+        //self.webView.removeFromSuperview()
         URLCache.shared.removeAllCachedResponses()
         URLCache.shared.diskCapacity = 0
         URLCache.shared.memoryCapacity = 0
@@ -86,13 +90,13 @@ class PdfViewController: UIViewController, WKUIDelegate {
     func syncModelView(){
        
         if let pdfdata = model.pdf?.pdfData{
-            wkWebView.load( pdfdata as Data, mimeType: "application/pdf",
-                          characterEncodingName: "utf8", baseURL: URL(string:"http://www.google.es")!)
+            webView.load( pdfdata as Data, mimeType: "application/pdf",
+                          textEncodingName: "utf8", baseURL: URL(string:"http://www.google.es")!)
         }else{
-            let asyncData = AsyncData(url: URL(string:self.model.pdfurl!)!, defaultData: self.defaultImageAsData)
+            let asyncData = AsyncData(url: URL(string:self.model.pdfurl!)!, defaultData: PdfViewController.defaultImageAsData)
             asyncData.delegate = self
-            wkWebView.load( asyncData.data, mimeType: "application/pdf",
-                          characterEncodingName: "utf8", baseURL: URL(string:"http://www.google.es")!)
+            webView.load( asyncData.data, mimeType: "application/pdf",
+                          textEncodingName: "utf8", baseURL: URL(string:"http://www.google.es")!)
      
         }
 
@@ -133,8 +137,8 @@ extension PdfViewController: AsyncDataDelegate{
             try! self.context.save()
             
             DispatchQueue.main.async {
-                    self.wkWebView.load( sender.data , mimeType: "application/pdf",
-                                      characterEncodingName: "utf8", baseURL:  URL(string:"http://www.google.es")!)
+                    self.webView.load( sender.data , mimeType: "application/pdf",
+                                      textEncodingName: "utf8", baseURL:  URL(string:"http://www.google.es")!)
                 
             }
             
